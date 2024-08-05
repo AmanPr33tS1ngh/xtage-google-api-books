@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block meta %}
+
+    <title>Books - Recommendations</title>
+    <meta name="apple-mobile-web-app-title" content="Books - Recommendations" />
+
+{% endblock %}
+{% block content %}
+  {% load static %}
+    <main id="main" class="main">
+        <article>
+        <section id="search" class="results">
+      {% if message %}
+      <p>{{ message }}</p>
+      <a href="/user/signin">Sign-In / Sign-Up</a>
+      {% endif %}
+      {% if error %}
+      <p>{{ error }}</p>
+      {% endif %}
+      <div style="
+    display: flex;
+    justify-content: space-around;
+      margin: 0 25px;
+">
+        <div>
+          <h1>Sort By: </h1>
+          <a href="?sort_by=genres__name" class="info" style="margin-bottom: 5px; background-color: #25cc8c40;">Genre</a>
+          <a href="?sort_by=publication_date" class="info" style="margin-bottom: 5px; background-color: #25cc8c40;">Publication Date</a>
+          <a href="?sort_by=ratings" class="info" style="margin-bottom: 5px; background-color: #25cc8c40;">Rating</a>
+        </div>
+        <div>
+          <h1>Filter: </h1>
+          <a href="?filter_by=mine" class="info" style="margin-bottom: 5px; background-color: #25cc8c40;">My Recommendations</a>
+          <a href="?filter_by=all" class="info" style="margin-bottom: 5px; background-color: #25cc8c40;">All Recommendations</a>
+        </div>
+      </div>
+      {% for book in books %}
+          <div class='book-wo-flex'  style='background: linear-gradient(#ebe6a240, rgba(0, 0, 0, 0));'>
+            <div style="
+    margin: 0 16px;
+    padding: 0 32px;">
+              <span>Recommended By :</span>
+                {% for recommended_by in book.recommendations %}
+                  <span class='info' style="background-color: #25cc8c40; margin-top: 15px;">
+                    {{recommended_by.full_name}}
+                  </span>
+                {% endfor %}
+              </div>
+            <div class="book">
+            
+            <a href='http://books.google.co.in/books?id={{book.google_book_id}}&hl=&source=gbs_api' target='_blank'><img class='thumbnail' src="{{book.cover_image}}" alt='cover'></a><div class='book-info'>
+            <h3 class='book-title' style="
+    display: flex;
+    width: 100%;
+    justify-content: space-between;">
+              <div class='title' style="margin-right: 20px;">
+                {{book.title}}
+              </div>
+              <div class="flex-only">
+                {% if book.ratings %}
+                
+                <div class="flex-only" style="white-space: nowrap; margin: 0 5px;">{{book.ratings}}<p style="font-size: 12px;
+    margin: 0;">⭐</p></div>
+                {% else %}
+                <div class="flex-only" style="white-space: nowrap; margin: 0 5px;">0<p style="font-size: 12px;
+    margin: 0;">⭐</p></div>
+                {% endif %}
+                {% if book.publication_date %}
+                
+                <div style="white-space: nowrap">{{book.publication_date}}</div>
+                {% endif %}
+                {% if book.can_remove_recommendations %}
+                  <form action="{% url 'remove_recommendation' %}" method="post" style="cursor: pointer;">
+                    {% csrf_token %}
+                    <input type="hidden" name="google_book_id" value="{{ book.google_book_id }}"/>
+                    <button type="submit" style="cursor: pointer; background: inherit;">💡</button>
+                  </form>
+                {% endif %}
+              </div>
+            </h3>
+              <div class='book-authors'>
+                {% for author in book.authors %}
+                  <div class='info' style="background-color: #25cc8c40; margin-top: 15px;">{{author.name}}</div>
+                {% endfor %}
+              </div>
+              <div class="book-genres">
+                {% for genre in book.genres %}
+                <div class='info' style="background-color: #25cc8c40; margin-top: 15px;">
+                {{genre.name}}
+              </div>
+              {% endfor %}
+              </div>
+              {% if book.description %}
+
+              <div style="margin: 10px 0">{{book.description}}</div>
+              {% endif %}
+            </div>
+          </div>
+          </div>
+      {% endfor %}
+        </section>
+      </article>
+    </main>
+{% endblock %}

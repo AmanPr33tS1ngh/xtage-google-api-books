@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block meta %}
+
+    <title>Books - Index</title>
+    <meta name="apple-mobile-web-app-title" content="Books" />
+
+{% endblock %}
+{% block content %}
+  {% load static %}
+    <main id="main" class="main">
+      <article>
+        <section id="search" class="results">
+          <div id="input-container" class="flex p-32">
+            <input
+              id="search-box"
+              class="search-box"
+              placeholder="Search books..."
+              aria-label="Search books"
+            />
+
+          <div id='use-filters'>
+            <input
+              id="search-by-title"
+              class="search-box w-100"
+              placeholder="Search by title..."
+              aria-label="Search by title"
+            />
+            <input
+              id="search-by-authors"
+              class="search-box w-100"
+              placeholder="Search by authors..."
+              aria-label="Search by authors"
+            />
+            <input
+              id="search-by-categories"
+              class="search-box w-100"
+              placeholder="Search by categories..."
+              aria-label="Search by categories"
+            />
+            <input
+              id="search-by-publisher"
+              class="search-box w-100"
+              placeholder="Search by publisher..."
+              aria-label="Search publisher"
+            />
+          </div>
+        <p id='use-filter-text'>Use Filters</p>
+      <label class="filter-switch" title="use filter">
+        <input type="checkbox" id="checkbox" aria-label="use filter" />
+        <div class="slider round"></div>
+      </label>
+            </div>
+            
+          </div>
+          <div class="list-book search">
+            <div class="prompt">Enter a search term</div>
+          </div>
+        </section>
+      </article>
+    </main>
+{% endblock %}

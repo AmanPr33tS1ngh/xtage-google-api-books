@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block meta %}
+
+    <title>Books - Liked By You</title>
+    <meta name="apple-mobile-web-app-title" content="Books - Liked By You" />
+
+{% endblock %}
+{% block content %}
+  {% load static %}
+    <main id="main" class="main">
+        <article>
+        <section id="search" class="results">
+      {% if message %}
+      <p>{{ message }}</p>
+      <a href="/user/signin">Sign-In / Sign-Up</a>
+      {% endif %}
+      {% if error %}
+      <p>{{ error }}</p>
+      {% endif %}
+      {% for book in books %}
+          <div class='book'  style='background: linear-gradient(#ebe6a240, rgba(0, 0, 0, 0));'>
+            <a href='http://books.google.co.in/books?id={{book.google_book_id}}&hl=&source=gbs_api' target='_blank'><img class='thumbnail' src="{{book.cover_image}}" alt='cover'></a><div class='book-info'><h3 class='book-title'><div class='title'>
+            {{book.title}}</div></h3>
+              <div class='book-authors'>
+                {% for author in book.authors %}
+                  <div class='info' style="background-color: #25cc8c40; margin-top: 15px;">{{author.name}}</div>
+                {% endfor %}
+              </div>
+              <div class="book-genres">
+                {% for genre in book.genres %}
+                <div class='info' style="background-color: #25cc8c40; margin-top: 15px;">
+                {{genre.name}}
+              </div>
+              {% endfor %}
+              </div>
+              <div style="margin: 10px 0">{{book.description}}</div>
+              
+            <div class="like-or-comment-container d-flex-sb">
+              <form action="{% url 'likes' %}" method="post" class="like-or-comment" id="like-{{book.google_book_id}}">
+                {% csrf_token %}
+                    <input type="hidden" name="google_book_id" value="{{ book.google_book_id }}"/>
+                  <button class='info' style="background-color: #25cc8c40;">{{book.total_likes}} 👍</button>
+              </form>
+              <button class="like-or-comment" onclick="openCommentSection('{{book.google_book_id}}')">
+                  <p class="comment">{{book.total_comments}}</p> 💬
+              </button>
+          </div>
+
+          <form action="{% url 'comment' %}" method="post" id="comment-{{book.google_book_id}}" style="display: none; width: 100%;">
+            {% csrf_token %}
+              <input type="hidden" name="google_book_id" value="{{ book.google_book_id }}"/>
+            <input name="comment" style="
+              width: 100%;
+              border-radius: 25px;
+              padding: 10px 20px;
+              margin-bottom: 8px;
+    border: 1px solid;
+              " type="text"/>
+            <button class='info' style="background-color: #25cc8c40;">Send</button>
+          </form>
+            </div>
+          </div>
+      {% endfor %}
+        </section>
+      </article>
+    </main>
+{% endblock %}

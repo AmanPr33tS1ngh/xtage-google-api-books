@@ -1,0 +1,42 @@
+ <aside>
+    <div class="logo">
+    <a href="/">
+        Books
+    </a>
+    </div>
+    <nav>
+    <ul>
+        <li class="subhead">DISCOVER</li>
+        <li>
+        <a class="nav scrolltoview" href="/"
+            ><span class="icon">🔍</span>Search</a
+        >
+        </li>
+        <li>
+        <a class="nav scrolltoview" href="/likes/"
+            ><span class="icon">💖</span>Liked/Commented By You</a
+        >
+        </li>
+        <li>
+        <a class="nav scrolltoview" href="/recommendations/"
+            ><span class="icon">💡</span>Recommendations</a
+        >
+        </li>
+    </ul>
+    </nav>
+    <div class="spacer"></div>
+    <label class="theme-switch" for="checkbox" title="Night mode">
+    <input type="checkbox" id="checkbox" aria-label="Night mode" />
+    <div class="slider round"></div>
+    </label>
+    {% if user.is_authenticated %}
+        <form class="nav scrolltoview" action="{% url 'logout' %}" method="post" style="cursor: pointer;">
+            {% csrf_token %}
+                <button type="submit" style="border: none; background: inherit; color: white; cursor: pointer;">
+            Logout</button>
+        </form>
+    {% else %}
+        <a href="{% url 'signin' %}" class="nav scrolltoview" style="border: none; background: inherit; color: white; cursor: pointer;">Sign In</a>
+        <a href="{% url 'signup' %}" class="nav scrolltoview" style="border: none; background: inherit; color: white; cursor: pointer;">Sign Up</a>
+    {% endif %}
+</aside>
